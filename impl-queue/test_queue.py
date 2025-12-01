@@ -5,14 +5,14 @@ from queue import Queue
 def test_new_queue_is_empty():
     """Test that a newly created queue is empty"""
     queue = Queue()
-    assert queue.isEmpty() == True
+    assert queue.isEmpty() is True
 
 
 def test_enqueue_single_item():
     """Test enqueueing a single item"""
     queue = Queue()
     queue.enqueue(1)
-    assert queue.isEmpty() == False
+    assert queue.isEmpty() is False
 
 
 def test_enqueue_multiple_items():
@@ -21,7 +21,7 @@ def test_enqueue_multiple_items():
     queue.enqueue(1)
     queue.enqueue(2)
     queue.enqueue(3)
-    assert queue.isEmpty() == False
+    assert queue.isEmpty() is False
 
 
 def test_peek_returns_front_item():
@@ -31,7 +31,7 @@ def test_peek_returns_front_item():
     queue.enqueue(2)
     assert queue.peek() == 1
     assert queue.peek() == 1  # Should still be 1
-    assert queue.isEmpty() == False  # Queue should still have items
+    assert queue.isEmpty() is False  # Queue should still have items
 
 
 def test_dequeue_single_item():
@@ -40,7 +40,7 @@ def test_dequeue_single_item():
     queue.enqueue(1)
     result = queue.dequeue()
     assert result == 1
-    assert queue.isEmpty() == True
+    assert queue.isEmpty() is True
 
 
 def test_dequeue_multiple_items_fifo_order():
@@ -53,7 +53,7 @@ def test_dequeue_multiple_items_fifo_order():
     assert queue.dequeue() == 1
     assert queue.dequeue() == 2
     assert queue.dequeue() == 3
-    assert queue.isEmpty() == True
+    assert queue.isEmpty() is True
 
 
 def test_dequeue_from_empty_queue_raises_error():
@@ -79,7 +79,7 @@ def test_enqueue_dequeue_enqueue_sequence():
     queue.enqueue(3)
     assert queue.dequeue() == 2
     assert queue.dequeue() == 3
-    assert queue.isEmpty() == True
+    assert queue.isEmpty() is True
 
 
 def test_enqueue_different_data_types():
@@ -121,14 +121,14 @@ def test_large_number_of_items():
     for i in range(n):
         assert queue.dequeue() == i
 
-    assert queue.isEmpty() == True
+    assert queue.isEmpty() is True
 
 
 def test_enqueue_none_value():
     """Test that None can be enqueued"""
     queue = Queue()
     queue.enqueue(None)
-    assert queue.isEmpty() == False
+    assert queue.isEmpty() is False
     assert queue.peek() is None
     assert queue.dequeue() is None
 
@@ -137,7 +137,7 @@ def test_enqueue_zero():
     """Test that zero can be enqueued"""
     queue = Queue()
     queue.enqueue(0)
-    assert queue.isEmpty() == False
+    assert queue.isEmpty() is False
     assert queue.peek() == 0
     assert queue.dequeue() == 0
 
@@ -145,19 +145,19 @@ def test_enqueue_zero():
 def test_isEmpty_after_operations():
     """Test isEmpty returns correct value after various operations"""
     queue = Queue()
-    assert queue.isEmpty() == True
+    assert queue.isEmpty() is True
 
     queue.enqueue(1)
-    assert queue.isEmpty() == False
+    assert queue.isEmpty() is False
 
     queue.enqueue(2)
-    assert queue.isEmpty() == False
+    assert queue.isEmpty() is False
 
     queue.dequeue()
-    assert queue.isEmpty() == False
+    assert queue.isEmpty() is False
 
     queue.dequeue()
-    assert queue.isEmpty() == True
+    assert queue.isEmpty() is True
 
 
 def test_fifo_with_mixed_operations():
@@ -173,4 +173,4 @@ def test_fifo_with_mixed_operations():
     queue.enqueue(5)
     assert queue.dequeue() == 4
     assert queue.dequeue() == 5
-    assert queue.isEmpty() == True
+    assert queue.isEmpty() is True
