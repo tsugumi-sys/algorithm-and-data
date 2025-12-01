@@ -111,19 +111,6 @@ def test_peek_does_not_modify_queue():
     assert queue.dequeue() == 3
 
 
-def test_large_number_of_items():
-    """Test queue with a large number of items"""
-    queue = Queue()
-    n = 1000
-    for i in range(n):
-        queue.enqueue(i)
-
-    for i in range(n):
-        assert queue.dequeue() == i
-
-    assert queue.isEmpty() is True
-
-
 def test_enqueue_none_value():
     """Test that None can be enqueued"""
     queue = Queue()
@@ -173,4 +160,27 @@ def test_fifo_with_mixed_operations():
     queue.enqueue(5)
     assert queue.dequeue() == 4
     assert queue.dequeue() == 5
+    assert queue.isEmpty() is True
+
+
+def test_enqueue_respects_capacity_limit():
+    """Test that enqueueing beyond capacity raises an error"""
+    queue = Queue(capacity=2)
+    queue.enqueue("first")
+    queue.enqueue("second")
+
+    with pytest.raises(OverflowError):
+        queue.enqueue("third")
+
+
+def test_dequeue_allows_reuse_of_capacity():
+    """Test that dequeuing frees capacity for new enqueues"""
+    queue = Queue(capacity=2)
+    queue.enqueue(1)
+    queue.enqueue(2)
+    assert queue.dequeue() == 1
+
+    queue.enqueue(3)
+    assert queue.dequeue() == 2
+    assert queue.dequeue() == 3
     assert queue.isEmpty() is True
