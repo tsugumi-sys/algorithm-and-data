@@ -1,5 +1,3 @@
-import pytest
-
 from problem2 import tokenize
 
 
