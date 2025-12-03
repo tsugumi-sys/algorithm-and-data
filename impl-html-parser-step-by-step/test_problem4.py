@@ -45,3 +45,29 @@ def test_self_closing_tag_can_carry_attributes():
         }
     ]
     assert tokenize(input_html) == expected
+
+
+def test_multiple_self_closing_siblings():
+    tokens = [
+        {"type": "SelfClosingTag", "name": "img", "attrs": {"src": "a.png"}},
+        {"type": "SelfClosingTag", "name": "img", "attrs": {"src": "b.png"}},
+    ]
+
+    root = parse(tokens)
+
+    assert isinstance(root, ElementNode)
+    assert len(root.children) == 2
+    assert [child.name for child in root.children] == ["img", "img"]
+    assert [child.attrs for child in root.children] == [
+        {"src": "a.png"},
+        {"src": "b.png"},
+    ]
+
+
+def test_tokenize_self_closing_at_start_of_input():
+    input_html = "<br/>line"
+    expected = [
+        {"type": "SelfClosingTag", "name": "br"},
+        {"type": "Text", "data": "line"},
+    ]
+    assert tokenize(input_html) == expected

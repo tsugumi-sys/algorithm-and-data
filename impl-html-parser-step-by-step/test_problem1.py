@@ -1,5 +1,3 @@
-import pytest
-
 from problem1 import tokenize
 
 
@@ -35,3 +33,28 @@ def test_multiple_text_segments_are_preserved():
         {"type": "EndTag", "name": "p"},
     ]
     assert tokenize(input_html) == expected
+
+
+def test_text_before_and_after_tags():
+    input_html = "before<div>inside</div>after"
+    expected = [
+        {"type": "Text", "data": "before"},
+        {"type": "StartTag", "name": "div"},
+        {"type": "Text", "data": "inside"},
+        {"type": "EndTag", "name": "div"},
+        {"type": "Text", "data": "after"},
+    ]
+    assert tokenize(input_html) == expected
+
+
+def test_consecutive_tags_without_text():
+    input_html = "<br><hr>"
+    expected = [
+        {"type": "StartTag", "name": "br"},
+        {"type": "StartTag", "name": "hr"},
+    ]
+    assert tokenize(input_html) == expected
+
+
+def test_empty_input_returns_empty_list():
+    assert tokenize("") == []

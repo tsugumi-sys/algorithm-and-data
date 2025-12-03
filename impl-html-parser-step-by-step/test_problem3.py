@@ -50,3 +50,28 @@ def test_multiple_siblings_under_root():
     assert all(isinstance(child, ElementNode) for child in root.children)
     assert [child.name for child in root.children] == ["p", "p"]
     assert [child.children[0].data for child in root.children] == ["first", "second"]
+
+
+def test_text_only_input_creates_text_child_under_root():
+    tokens = [{"type": "Text", "data": "just text"}]
+
+    root = parse(tokens)
+
+    assert isinstance(root, ElementNode)
+    assert len(root.children) == 1
+    assert isinstance(root.children[0], TextNode)
+    assert root.children[0].data == "just text"
+
+
+def test_attributes_are_preserved_on_element_nodes():
+    tokens = [
+        {"type": "StartTag", "name": "div", "attrs": {"id": "main"}},
+        {"type": "Text", "data": "body"},
+        {"type": "EndTag", "name": "div"},
+    ]
+
+    root = parse(tokens)
+
+    div = root.children[0]
+    assert isinstance(div, ElementNode)
+    assert div.attrs == {"id": "main"}

@@ -38,3 +38,27 @@ def test_unexpected_end_tag_pops_until_match():
     assert len(span.children) == 1
     assert isinstance(span.children[0], TextNode)
     assert span.children[0].data == "hi"
+
+
+def test_nested_unclosed_tags_are_closed_at_end():
+    tokens = tokenize("<div><b><i>deep</div>")
+    root = parse(tokens)
+
+    div = root.children[0]
+    bold = div.children[0]
+    italic = bold.children[0]
+
+    assert isinstance(div, ElementNode)
+    assert isinstance(bold, ElementNode)
+    assert isinstance(italic, ElementNode)
+    assert italic.children[0].data == "deep"
+
+
+def test_trailing_unclosed_top_level_tag():
+    tokens = tokenize("<section>content")
+    root = parse(tokens)
+
+    assert len(root.children) == 1
+    section = root.children[0]
+    assert isinstance(section, ElementNode)
+    assert [child.data for child in section.children] == ["content"]
