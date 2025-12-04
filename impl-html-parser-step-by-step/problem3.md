@@ -45,7 +45,7 @@ ElementNode("div")
         └─ TextNode("there")
 ```
 
-### 要件
+### ヒント
 
 * 入力は**正しいネスト**を仮定（壊れたHTMLは考えない）
 * `StartTag`：新しい `ElementNode` を作ってスタックに積む
