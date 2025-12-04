@@ -1,4 +1,3 @@
-
 from problem4 import ElementNode, TextNode, parse, tokenize
 
 
@@ -26,12 +25,15 @@ def test_parse_handles_self_closing_without_stack_push():
     root = parse(tokens)
 
     assert isinstance(root, ElementNode)
-    assert root.name == "div"
-    assert [type(child) for child in root.children] == [TextNode, ElementNode, TextNode]
-    assert root.children[0].data == "Hello"
-    assert root.children[1].name == "br"
-    assert root.children[1].children == []
-    assert root.children[2].data == "World"
+    assert len(root.children) == 1  # Root has one child: the div
+
+    div = root.children[0]
+    assert div.name == "div"
+    assert [type(child) for child in div.children] == [TextNode, ElementNode, TextNode]
+    assert div.children[0].data == "Hello"
+    assert div.children[1].name == "br"
+    assert div.children[1].children == []
+    assert div.children[2].data == "World"
 
 
 def test_self_closing_tag_can_carry_attributes():
