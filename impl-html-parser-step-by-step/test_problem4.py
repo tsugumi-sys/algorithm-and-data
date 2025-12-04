@@ -1,4 +1,3 @@
-import pytest
 
 from problem4 import ElementNode, TextNode, parse, tokenize
 
