@@ -126,7 +126,9 @@ def consume_attr_value(html: str, pos: int) -> tuple[str, int]:
 
 
 def consume_whitespaces(html: str, pos: int) -> int:
-    while pos < len(html) and html[pos] == " ":
+    while (
+        pos < len(html) and html[pos].isspace()
+    ):  # handle all white space characters. (just space, line break etc)
         pos += 1
     return pos
 

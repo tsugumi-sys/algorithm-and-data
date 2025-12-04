@@ -27,27 +27,34 @@ class LRUCache:
         self.capacity = capacity
         self.ttl_seconds = ttl_seconds
         self.cache: dict[Any, CacheNode] = {}
-
-        # Dummy head/tail nodes to avoid edge checks when moving nodes.
-        self.head = CacheNode("__head__", CacheItem(None, float("inf")))
-        self.tail = CacheNode("__tail__", CacheItem(None, float("inf")))
-        self.head.next = self.tail
-        self.tail.prev = self.head
+        self.head: CacheNode | None = None
+        self.tail: CacheNode | None = None
 
     def _add_to_front(self, node: CacheNode):
-        node.prev = self.head
-        node.next = self.head.next
-        if node.next:
-            node.next.prev = node
-        self.head.next = node
+        if not self.head:
+            # List is empty
+            self.head = self.tail = node
+            node.prev = node.next = None
+        else:
+            # Add to front
+            node.prev = None
+            node.next = self.head
+            self.head.prev = node
+            self.head = node
 
     def _remove_node(self, node: CacheNode):
-        prev_node = node.prev
-        next_node = node.next
-        if prev_node:
-            prev_node.next = next_node
-        if next_node:
-            next_node.prev = prev_node
+        if node.prev:
+            node.prev.next = node.next
+        else:
+            # Removing head
+            self.head = node.next
+
+        if node.next:
+            node.next.prev = node.prev
+        else:
+            # Removing tail
+            self.tail = node.prev
+
         node.prev = None
         node.next = None
 
@@ -62,22 +69,21 @@ class LRUCache:
         node.item.expiry_time = time.time() + self.ttl_seconds
 
     def _evict_lru(self):
-        lru = self.tail.prev
-        if lru and lru is not self.head:
+        if self.tail:
+            lru = self.tail
             self._remove_node(lru)
             del self.cache[lru.key]
 
     def _ensure_capacity(self):
-        while len(self.cache) >= self.capacity and self.capacity > 0:
-            lru = self.tail.prev
-            if not lru or lru is self.head:
-                break
-            if self._is_expired(lru):
-                self._remove_node(lru)
-                del self.cache[lru.key]
-                continue
+        # First, remove all expired items from the tail
+        while self.tail and self._is_expired(self.tail):
+            lru = self.tail
+            self._remove_node(lru)
+            del self.cache[lru.key]
+
+        # Then, if still at capacity, evict one non-expired LRU item
+        if len(self.cache) >= self.capacity and self.capacity > 0:
             self._evict_lru()
-            break
 
     def get(self, key: Any) -> Any:
         node = self.cache.get(key)

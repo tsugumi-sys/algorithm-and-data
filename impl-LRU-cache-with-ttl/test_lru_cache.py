@@ -1,6 +1,6 @@
 import pytest
 import time
-from lru_cache import LRUCache
+from lru_cache_answer import LRUCache
 
 
 # ============================================================================
