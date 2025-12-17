@@ -1,5 +1,6 @@
 # Implement your BST here
 
+
 class Node:
     def __init__(self, value):
         raise NotImplementedError
@@ -10,6 +11,9 @@ class BinarySearchTree:
         raise NotImplementedError
 
     def insert(self, value):
+        raise NotImplementedError
+
+    def remove(self, value):
         raise NotImplementedError
 
     def search(self, value):

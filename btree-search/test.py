@@ -54,3 +54,38 @@ def test_inorder_supports_range_like_queries():
     inorder_values = tree.inorder()
     range_values = [v for v in inorder_values if 25 <= v <= 65]
     assert range_values == [30, 40, 50, 60, 65]
+
+
+def test_remove_leaf_node_updates_traversals():
+    tree = build_tree([10, 5, 15, 2, 7])
+    tree.remove(2)  # leaf
+    assert tree.inorder() == [5, 7, 10, 15]
+    assert tree.search(2) is False
+
+
+def test_remove_node_with_one_child_relinks_subtree():
+    tree = build_tree([10, 5, 15, 12])
+    tree.remove(15)  # node with single left child 12
+    assert tree.inorder() == [5, 10, 12]
+    assert tree.search(15) is False
+    assert tree.search(12) is True
+
+
+def test_remove_node_with_two_children_preserves_ordering():
+    tree = build_tree([20, 10, 30, 25, 40, 5, 15])
+    tree.remove(20)  # root with two children
+    assert tree.inorder() == [5, 10, 15, 25, 30, 40]
+    assert tree.search(20) is False
+
+
+def test_remove_raises_when_value_missing():
+    tree = build_tree([1, 2, 3])
+    with pytest.raises(KeyError):
+        tree.remove(99)
+
+
+def test_remove_only_one_duplicate_at_a_time():
+    tree = build_tree([5, 5, 5])
+    tree.remove(5)
+    assert tree.inorder() == [5, 5]
+    assert tree.search(5) is True
