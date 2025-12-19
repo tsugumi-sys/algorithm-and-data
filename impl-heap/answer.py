@@ -2,7 +2,10 @@ class MinHeap:
     def __init__(self, values=None):
         self._heap = [] if values is None else list(values)
         if self._heap:
-            self._heapify()
+            try:
+                self._heapify()
+            except TypeError as exc:
+                raise TypeError("Heap items must be mutually comparable") from exc
 
     def _heapify(self):
         for idx in range((len(self._heap) - 2) // 2, -1, -1):
@@ -38,7 +41,17 @@ class MinHeap:
             else:
                 break
 
+    def _ensure_comparable(self, value):
+        if not self._heap:
+            return
+        try:
+            _ = value < self._heap[0]
+            _ = self._heap[0] < value
+        except TypeError as exc:
+            raise TypeError("Heap items must be mutually comparable") from exc
+
     def push(self, value):
+        self._ensure_comparable(value)
         self._heap.append(value)
         self._bubble_up(len(self._heap) - 1)
 
@@ -67,7 +80,10 @@ class MaxHeap:
     def __init__(self, values=None):
         self._heap = [] if values is None else list(values)
         if self._heap:
-            self._heapify()
+            try:
+                self._heapify()
+            except TypeError as exc:
+                raise TypeError("Heap items must be mutually comparable") from exc
 
     def _heapify(self):
         for idx in range((len(self._heap) - 2) // 2, -1, -1):
@@ -100,7 +116,17 @@ class MaxHeap:
             else:
                 break
 
+    def _ensure_comparable(self, value):
+        if not self._heap:
+            return
+        try:
+            _ = value > self._heap[0]
+            _ = self._heap[0] > value
+        except TypeError as exc:
+            raise TypeError("Heap items must be mutually comparable") from exc
+
     def push(self, value):
+        self._ensure_comparable(value)
         self._heap.append(value)
         self._bubble_up(len(self._heap) - 1)
 
