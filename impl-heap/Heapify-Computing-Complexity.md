@@ -101,7 +101,7 @@ Below are two proofs you asked to integrate, written in GitHub-friendly format.
 
 ---
 
-## Proof 1: Using a Known Power Series Formula (公式から一発)
+## Proof 1: Using a Known Power Series Formula
 
 1. Start with the geometric series:
 
@@ -134,7 +134,7 @@ Done.
 
 ---
 
-## Proof 2: Rearrangement Trick (並べ替えトリック)
+## Proof 2: Rearrangement Trick
 
 Let:
 
