@@ -1,51 +1,48 @@
 # Why `_heapify()` Runs in **O(n)**
 
-*(Consistent Top-Based Height Definition)*
+*(GitHub-compatible, no LaTeX)*
 
-This explanation uses a **top-based height measured from the bottom**, which is the only definition that keeps the analysis internally consistent.
+This explanation uses one consistent definition of height, chosen so the math and intuition align perfectly.
 
 ---
 
 # 1. Height Definition (Consistent)
 
-We define height `h` as the distance **from the bottom level**:
+We define height `h` as the number of levels **above the bottom**:
 
 ```
-h = 0 → bottom level (leaves)
-h = 1 → one level above leaves
-h = 2 → two levels above leaves
+h = 0  → bottom level (leaves)
+h = 1  → one level above leaves
+h = 2  → two levels above leaves
 ...
-h = H → root (H = height of tree)
+h = H  → root (H ≈ log2(n))
 ```
 
-This definition is standard in tree theory:
-**leaves have height 0, the root has the maximum height**.
+This definition is ideal for `_heapify()` because:
 
-This is the correct height model for heapify because:
-
-* the maximum number of levels a node can move down = its height from the bottom
-* leaves never move → cost = 0
-* nodes near the root may move many levels → cost ≈ H
+* A node can move down at most `h` levels.
+* Leaves (h=0) never move.
+* The root (h=H) can move the farthest.
 
 ---
 
 # 2. Number of Nodes at Height `h`
 
-A binary heap is a **complete binary tree**, so:
+A binary heap is a **complete binary tree**.
 
-* The bottom level contains about **n/2 nodes**.
-* The next level contains about **n/4 nodes**.
-* Then **n/8**, and so on.
+In such a tree:
 
-Thus the number of nodes at height `h` is approximately:
+* The bottom level contains about `n/2` nodes.
+* The level above contains about `n/4` nodes.
+* Then `n/8`, etc.
 
-[
-\text{nodes}(h) \approx \frac{n}{2^{h+1}}
-]
+So the number of nodes at height `h` is approximately:
 
-This is asymptotically accurate because each higher level contains half as many nodes as the one below it.
+```
+nodes(h) ≈ n / 2^(h+1)
+```
 
-So we have:
+Example:
 
 ```
 h = 0 → ~ n/2 nodes
@@ -55,114 +52,86 @@ h = 2 → ~ n/8 nodes
 h = H → 1 node (the root)
 ```
 
-This matches the structure of a complete binary tree perfectly.
+This pattern is the backbone of the heapify complexity analysis.
 
 ---
 
-# 3. Maximum Sift-Down Cost at Height `h`
+# 3. Cost per Node at Height `h`
 
-A node at height `h` (distance from bottom) can move down **at most h levels**.
+A node at height `h` may need to sift down **at most h levels**.
 
-So the cost per node is:
+So:
 
-[
-\text{cost}(h) = h
-]
+```
+cost_per_node(h) = h
+```
 
 Examples:
 
-* Leaves (h = 0) never move.
-* Their parents (h = 1) may move one level.
-* Root (h = H) may move all the way down.
+* Leaves (h = 0) → cost 0
+* Nodes one level above leaves (h = 1) → cost 1
+* Root (h = H) → max cost H
 
-This height definition aligns naturally with sift-down behavior.
+This height definition matches sift-down behavior exactly.
 
 ---
 
 # 4. Total Cost of `_heapify()`
 
-Total work is:
+Total work = sum of (nodes at height h) × (cost per node).
 
-[
-T(n)
-= \sum_{h=0}^{H}
-\big( \text{nodes}(h) \times \text{cost}(h) \big)
-]
-
-Substitute the approximations:
-
-[
-\text{nodes}(h) \approx \frac{n}{2^{h+1}}
-\quad\text{and}\quad
-\text{cost}(h) = h
-]
-
-Thus:
-
-[
-T(n)
-\approx \sum_{h=0}^{H}
-\left(\frac{n}{2^{h+1}} \cdot h\right)
-]
+```
+T(n) ≈ sum over h=0..H of:  (n / 2^(h+1)) * h
+```
 
 Factor out `n`:
 
-[
-T(n)
-\approx n \sum_{h=0}^{\infty}
-\frac{h}{2^{h+1}}
-]
+```
+T(n) ≈ n * sum over h=0..∞ of (h / 2^(h+1))
+```
 
----
+Now, there is a classical identity:
 
-# 5. Convergence of the Series
-
-The series:
-
-[
-\sum_{h=1}^{\infty} \frac{h}{2^h}
-]
-
-is a known convergent series:
-
-[
-\sum_{h=1}^{\infty} \frac{h}{2^h} = 2
-]
+```
+sum over h=1..∞ of (h / 2^h) = 2
+```
 
 Therefore:
 
-[
-T(n)
-= n \cdot \frac{1}{2} \cdot 2
-= n
-]
+```
+T(n) ≈ n * (1/2) * 2 = n
+```
 
-So:
+So heapify runs in:
 
-[
-\boxed{T(n) = O(n)}
-]
+```
+O(n)
+```
 
 ---
 
-# 6. Intuition
+# 5. Intuition (No Math Needed)
 
-* Most nodes (~n/2) are leaves and require **zero** work.
-* The next quarter (~n/4) may move **one step**.
-* The next eighth (~n/8) may move **two steps**.
-* Very few nodes are expensive to fix.
-* The sum of all this work converges to a constant multiple of `n`.
+* About **n/2** nodes are leaves → cost 0
+* About **n/4** nodes may move 1 level
+* About **n/8** nodes may move 2 levels
+* About **n/16** nodes may move 3 levels
+* ...
 
-Thus bottom-up heap construction is linear time.
+Each level has fewer nodes, but higher possible cost.
+The two factors cancel out, and the total stays proportional to `n`.
+
+This is why bottom-up heap construction beats calling `push()` `n` times (which would be `O(n log n)`).
 
 ---
 
-# 7. Final Summary
+# 6. Final Summary
 
-> Using a consistent top-based height (measured from the bottom),
-> level `h` contains about `n / 2^(h+1)` nodes, each costing at most `h` to sift down.
-> The resulting series converges, giving the linear-time bound:
->
-> [
-> \boxed{T(n) = O(n)}
-> ]
+* Height `h` is counted from the bottom (leaves = 0).
+* Nodes at height `h` ≈ `n / 2^(h+1)`.
+* Cost per node at height `h` = `h`.
+* Total work is proportional to `n`.
+
+```
+Bottom-up heap construction runs in O(n) time.
+```
