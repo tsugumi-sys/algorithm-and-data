@@ -5,14 +5,14 @@ from stack import Stack
 def test_new_stack_is_empty():
     """Test that a newly created stack is empty"""
     stack = Stack()
-    assert stack.isEmpty() == True
+    assert stack.isEmpty() is True
 
 
 def test_push_single_item():
     """Test pushing a single item onto the stack"""
     stack = Stack()
     stack.push(1)
-    assert stack.isEmpty() == False
+    assert stack.isEmpty() is False
 
 
 def test_push_multiple_items():
@@ -21,7 +21,7 @@ def test_push_multiple_items():
     stack.push(1)
     stack.push(2)
     stack.push(3)
-    assert stack.isEmpty() == False
+    assert stack.isEmpty() is False
 
 
 def test_peek_returns_top_item():
@@ -31,7 +31,7 @@ def test_peek_returns_top_item():
     stack.push(2)
     assert stack.peek() == 2
     assert stack.peek() == 2  # Should still be 2
-    assert stack.isEmpty() == False  # Stack should still have items
+    assert stack.isEmpty() is False  # Stack should still have items
 
 
 def test_pop_single_item():
@@ -40,7 +40,7 @@ def test_pop_single_item():
     stack.push(1)
     result = stack.pop()
     assert result == 1
-    assert stack.isEmpty() == True
+    assert stack.isEmpty() is True
 
 
 def test_pop_multiple_items_lifo_order():
@@ -53,7 +53,7 @@ def test_pop_multiple_items_lifo_order():
     assert stack.pop() == 3
     assert stack.pop() == 2
     assert stack.pop() == 1
-    assert stack.isEmpty() == True
+    assert stack.isEmpty() is True
 
 
 def test_pop_from_empty_stack_raises_error():
@@ -79,7 +79,7 @@ def test_push_pop_push_sequence():
     stack.push(3)
     assert stack.pop() == 3
     assert stack.pop() == 2
-    assert stack.isEmpty() == True
+    assert stack.isEmpty() is True
 
 
 def test_push_different_data_types():
@@ -121,14 +121,14 @@ def test_large_number_of_items():
     for i in range(n - 1, -1, -1):
         assert stack.pop() == i
 
-    assert stack.isEmpty() == True
+    assert stack.isEmpty() is True
 
 
 def test_push_none_value():
     """Test that None can be pushed onto the stack"""
     stack = Stack()
     stack.push(None)
-    assert stack.isEmpty() == False
+    assert stack.isEmpty() is False
     assert stack.peek() is None
     assert stack.pop() is None
 
@@ -137,7 +137,7 @@ def test_push_zero():
     """Test that zero can be pushed onto the stack"""
     stack = Stack()
     stack.push(0)
-    assert stack.isEmpty() == False
+    assert stack.isEmpty() is False
     assert stack.peek() == 0
     assert stack.pop() == 0
 
@@ -145,16 +145,16 @@ def test_push_zero():
 def test_isEmpty_after_operations():
     """Test isEmpty returns correct value after various operations"""
     stack = Stack()
-    assert stack.isEmpty() == True
+    assert stack.isEmpty() is True
 
     stack.push(1)
-    assert stack.isEmpty() == False
+    assert stack.isEmpty() is False
 
     stack.push(2)
-    assert stack.isEmpty() == False
+    assert stack.isEmpty() is False
 
     stack.pop()
-    assert stack.isEmpty() == False
+    assert stack.isEmpty() is False
 
     stack.pop()
-    assert stack.isEmpty() == True
+    assert stack.isEmpty() is True

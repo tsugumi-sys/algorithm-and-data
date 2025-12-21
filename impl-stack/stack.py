@@ -10,29 +10,16 @@ class Node:
 
 class Stack:
     def __init__(self):
-        self._head: Node | None = None
+        raise NotImplementedError
 
     def pop(self) -> Any:
-        head = self._head
-        if head is None:
-            raise IndexError()
-        self._head = head.next
-        return head.item
+        raise NotImplementedError
 
     def push(self, item: Any):
-        node = Node(item, None)
-        head = self._head
-        if head is None:
-            self._head = node
-            return
-        node.next = head
-        self._head = node
+        raise NotImplementedError
 
     def peek(self) -> Any:
-        head = self._head
-        if head is None:
-            raise IndexError()
-        return head.item
+        raise NotImplementedError
 
     def isEmpty(self):
-        return self._head is None
+        raise NotImplementedError
