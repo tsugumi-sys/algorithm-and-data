@@ -1,11 +1,4 @@
-from dataclasses import dataclass
-from typing import Self, Any
-
-
-@dataclass
-class Node:
-    item: Any
-    next: Self | None
+from typing import Any
 
 
 class Stack:
