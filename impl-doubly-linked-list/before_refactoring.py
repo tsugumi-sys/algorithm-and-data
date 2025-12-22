@@ -15,38 +15,40 @@ class DoublyLinkedList:
         self._tail: Node | None = None
         self._size = 0
 
-    def _insert_between(
-        self, prev: Node | None, new_node: Node | None, next: Node | None
-    ):
-        if prev:
-            prev.next = new_node
-            new_node.prev = prev
-        else:
-            self._head = new_node
-        if next:
-            next.prev = new_node
-            new_node.next = next
-        else:
-            self._tail = new_node
-        self._size += 1
-
     def append(self, value):
         new = Node(value, None, None)
-        self._insert_between(self._tail, new, None)
+        if self._head is None and self._tail is None:
+            self._head = new
+            self._tail = new
+        else:
+            tail = self._tail
+            tail.next = new
+            new.prev = tail
+            self._tail = new
+        self._size += 1
 
     def prepend(self, value):
         new = Node(value, None, None)
-        self._insert_between(None, new, self._head)
+        if self._head is None and self._tail is None:
+            self._head = new
+            self._tail = new
+        else:
+            head = self._head
+            head.prev = new
+            new.next = head
+            self._head = new
+        self._size += 1
 
     def insert(self, index, value):
         if index > self._size or index < 0:  # zero based position.
             raise IndexError
 
-        new = Node(value, None, None)
-        if index == 0:
-            self._insert_between(None, new, self._head)
+        # head or single node case.
+        if self._size == 1 or index == 0:
+            self.prepend(value)  # handle adding as a head.
+        # multiple node and not-head case.
         elif index == self._size:
-            self._insert_between(self._tail, new, None)  # handle adding as a head.
+            self.append(value)
         else:
             new = Node(value, None, None)
             # if index is tail, we add new node to before the current tail, so we don't need to update the tail pointer.
@@ -57,31 +59,44 @@ class DoublyLinkedList:
                     break
                 node = node.next
                 current_idx += 1
-            self._insert_between(node.prev, new, node)
 
-    def _remove(self, node: Node):
-        if node.prev:
-            node.prev.next = node.next
-        else:
-            self._head = node.next
-        if node.next:
-            node.next.prev = node.prev
-        else:
-            self._tail = node.prev
-        self._size -= 1
-        return node.value
+            node.prev.next = new
+            new.prev = node.prev
+
+            node.prev = new
+            new.next = node
+
+            self._size += 1
 
     def pop_first(self):
         if self._size == 0:
             raise IndexError
-        poped = self._remove(self._head)
-        return poped
+        poped = self._head
+        if self._size == 1:
+            self._head = None
+            self._tail = None
+        else:
+            new_head = poped.next
+            new_head.prev = None
+            self._head = new_head
+
+        self._size -= 1
+        return poped.value
 
     def pop_last(self):
         if self._size == 0:
             raise IndexError
-        poped = self._remove(self._tail)
-        return poped
+        poped = self._tail
+        if self._size == 1:
+            self._head = None
+            self._tail = None
+        else:
+            new_tail = poped.prev
+            new_tail.next = None
+            self._tail = new_tail
+
+        self._size -= 1
+        return poped.value
 
     def find(self, value):
         current_node = self._head
