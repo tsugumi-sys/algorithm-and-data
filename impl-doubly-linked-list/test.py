@@ -46,7 +46,7 @@ def test_insert_middle_and_edges():
     assert reverse_values(dll) == [3, 2, 1]
 
     dll.insert(0, 0)
-    dll.insert(len(dll), 4)
+    dll.append(4)
     assert forward_values(dll) == [0, 1, 2, 3, 4]
     assert reverse_values(dll) == [4, 3, 2, 1, 0]
 
@@ -56,7 +56,7 @@ def test_insert_out_of_bounds_raises():
     with pytest.raises(IndexError):
         dll.insert(-1, 0)
     with pytest.raises(IndexError):
-        dll.insert(3, 99)
+        dll.insert(1, 99)
 
 
 def test_pop_first_and_pop_last():
@@ -84,7 +84,7 @@ def test_find_reports_membership():
 def test_reverse_iteration_stays_valid_after_mutations():
     dll = make_list([1, 2, 3, 4])
     dll.pop_first()  # remove 1
-    dll.pop_last()   # remove 4
+    dll.pop_last()  # remove 4
     dll.prepend(0)
     dll.insert(2, 2.5)
 

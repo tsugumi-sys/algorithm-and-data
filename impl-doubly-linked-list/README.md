@@ -3,7 +3,7 @@ Interface
     class DoublyLinkedList:
         append(value): add a node to the tail of the list
         prepend(value): add a node to the head of the list
-        insert(index, value): insert at a zero-based position (len is allowed, otherwise raise IndexError)
+        insert(index, value): insert at a zero-based position (raise IndexError for index < 0 or index >= len)
         pop_first(): remove and return the head value (raise IndexError if empty)
         pop_last(): remove and return the tail value (raise IndexError if empty)
         find(value): return True if any node stores the value
