@@ -15,9 +15,7 @@ class DoublyLinkedList:
         self._tail: Node | None = None
         self._size = 0
 
-    def _insert_between(
-        self, prev: Node | None, new_node: Node | None, next: Node | None
-    ):
+    def _insert_between(self, prev: Node | None, new_node: Node, next: Node | None):
         if prev:
             prev.next = new_node
             new_node.prev = prev
@@ -48,7 +46,6 @@ class DoublyLinkedList:
         elif index == self._size:
             self._insert_between(self._tail, new, None)  # handle adding as a head.
         else:
-            new = Node(value, None, None)
             # if index is tail, we add new node to before the current tail, so we don't need to update the tail pointer.
             node = self._head
             current_idx = 0
@@ -60,6 +57,9 @@ class DoublyLinkedList:
             self._insert_between(node.prev, new, node)
 
     def _remove(self, node: Node):
+        if node is None:
+            raise IndexError
+
         if node.prev:
             node.prev.next = node.next
         else:
@@ -94,12 +94,10 @@ class DoublyLinkedList:
         return found
 
     def iter_reverse(self):
-        reversed_items = []
         current = self._tail
         while current:
-            reversed_items.append(current.value)
+            yield current.value
             current = current.prev
-        return reversed_items
 
     def __len__(self):
         return self._size
