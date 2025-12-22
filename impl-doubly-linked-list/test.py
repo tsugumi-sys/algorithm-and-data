@@ -56,7 +56,14 @@ def test_insert_out_of_bounds_raises():
     with pytest.raises(IndexError):
         dll.insert(-1, 0)
     with pytest.raises(IndexError):
-        dll.insert(1, 99)
+        dll.insert(2, 99)
+
+
+def test_insert_at_len_appends():
+    dll = make_list([1, 2])
+    dll.insert(len(dll), 3)
+    assert forward_values(dll) == [1, 2, 3]
+    assert reverse_values(dll) == [3, 2, 1]
 
 
 def test_pop_first_and_pop_last():

@@ -40,18 +40,19 @@ class DoublyLinkedList:
         self._size += 1
 
     def insert(self, index, value):
-        if index >= self._size or index < 0:  # zero based position.
+        if index > self._size or index < 0:  # zero based position.
             raise IndexError
 
-        new = Node(value, None, None)
         # head or single node case.
         if self._size == 1 or index == 0:
             self.prepend(value)  # handle adding as a head.
         # multiple node and not-head case.
+        elif index == self._size:
+            self.append(value)
         else:
+            new = Node(value, None, None)
             # if index is tail, we add new node to before the current tail, so we don't need to update the tail pointer.
             node = self._head
-            print("start", node.value)
             current_idx = 0
             while node:
                 if current_idx == index:
@@ -79,10 +80,6 @@ class DoublyLinkedList:
             new_head.prev = None
             self._head = new_head
 
-            if self._size == 1:
-                new_head.next = None
-                self._tail = new_head
-
         self._size -= 1
         return poped.value
 
@@ -98,10 +95,6 @@ class DoublyLinkedList:
             new_tail.next = None
             self._tail = new_tail
 
-            if self._size == 1:
-                new_tail.prev = None
-                self._head = new_tail
-
         self._size -= 1
         return poped.value
 
@@ -116,12 +109,12 @@ class DoublyLinkedList:
         return found
 
     def iter_reverse(self):
-        reversed = []
+        reversed_items = []
         current = self._tail
         while current:
-            reversed.append(current.value)
+            reversed_items.append(current.value)
             current = current.prev
-        return reversed
+        return reversed_items
 
     def __len__(self):
         return self._size
