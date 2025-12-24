@@ -39,22 +39,18 @@ class DoublyLinkedList:
     def insert(self, index, value):
         if index > self._size or index < 0:  # zero based position.
             raise IndexError
-
         new = Node(value, None, None)
-        if index == 0:
-            self._insert_between(None, new, self._head)
-        elif index == self._size:
-            self._insert_between(self._tail, new, None)  # handle adding as a head.
-        else:
-            # if index is tail, we add new node to before the current tail, so we don't need to update the tail pointer.
-            node = self._head
-            current_idx = 0
-            while node:
-                if current_idx == index:
-                    break
-                node = node.next
-                current_idx += 1
-            self._insert_between(node.prev, new, node)
+
+        current_idx = 0
+        prev = None
+        next = self._head
+        while current_idx < self._size:
+            if current_idx == index:
+                break
+            current_idx += 1
+            prev = next
+            next = next.next
+        self._insert_between(prev, new, next)
 
     def _remove(self, node: Node):
         if node is None:
