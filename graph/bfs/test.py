@@ -43,3 +43,20 @@ def test_traversal_stays_in_connected_component():
     graph.add_edge("X", "Y")  # disconnected component
 
     assert set(bfs(graph, "X")) == {"X", "Y"}
+
+
+def test_add_edge_is_undirected():
+    graph = Graph()
+    graph.add_edge("A", "B")
+
+    assert [n.value for n in graph.neighbors("A")] == ["B"]
+    assert [n.value for n in graph.neighbors("B")] == ["A"]
+
+
+def test_add_edge_ignores_duplicates():
+    graph = Graph()
+    graph.add_edge("A", "B")
+    graph.add_edge("A", "B")
+
+    assert [n.value for n in graph.neighbors("A")] == ["B"]
+    assert [n.value for n in graph.neighbors("B")] == ["A"]
