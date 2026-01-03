@@ -1,21 +1,21 @@
-## 🧱 前提：Problem 0（今やろうとしてるやつ）
+## Prereq: Problem 0 (what you're about to do)
 
-**Problem 0: 一番シンプルな Tokenizer**
+**Problem 0: The simplest tokenizer**
 
-* **入力**: `str`（HTMLライクな文字列）
-* **出力**: `list[tuple[str, str]]`
+* **Input**: `str` (HTML-like string)
+* **Output**: `list[tuple[str, str]]`
 
   * `('TAG', 'div')`
   * `('TEXT', 'Hello')`
   * `('TAG', '/div')`
 
-### 仕様
+### Specs
 
-* `<` が来たら「タグ開始」、`>` までを `TAG` として読む
-* それ以外は `TEXT` として読む
-* 階層構造は考えない（ただの列）
+* When you see `<`, treat it as "tag start" and read until `>` as `TAG`
+* Otherwise read as `TEXT`
+* Do not consider nesting (just a flat list)
 
-### 入出力例
+### Examples
 
 ```python
 tokenize("<div>Hello</div>")

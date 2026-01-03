@@ -1,14 +1,14 @@
-## Problem 4: self-closing タグに対応（`<br/>`, `<img />`）
+## Problem 4: Support self-closing tags (`<br/>`, `<img />`)
 
-### ゴール
+### Goal
 
-Self-closing タグを「Start→End のセット」として扱う。
+Treat self-closing tags as a Start→End pair.
 
 ```html
 <div>Hello<br/>World</div>
 ```
 
-をパースした結果ツリー：
+Parsed tree:
 
 ```text
 Element(div)
@@ -17,10 +17,10 @@ Element(div)
   └─ Text("World")
 ```
 
-### 要件
+### Requirements
 
-* Tokenizer側で `<br/>` を見たら
-  → `{"type": "SelfClosingTag", "name": "br"}` としてもOK
-* Parser側で `SelfClosingTag` を見たら：
+* In the tokenizer, when you see `<br/>`,
+  it's OK to emit `{"type": "SelfClosingTag", "name": "br"}`
+* In the parser, when you see `SelfClosingTag`:
 
-  * 子要素なしの `ElementNode` をひとつ作り、**スタック操作はしない**
+  * Create a single `ElementNode` with no children, and **do not touch the stack**

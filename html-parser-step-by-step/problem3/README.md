@@ -1,15 +1,15 @@
-## Problem 3: ネスト対応パーサー（DOMっぽいツリー作成）
+## Problem 3: Nested parser (build a DOM-like tree)
 
-ここから **「パーサー」** の領域。
+From here it's the **parser** part.
 
-### ゴール
+### Goal
 
-Problem 1 or 2 で作ったトークン列から、  
-**ツリー構造をもつノード** を生成する。
+From the token list built in Problem 1 or 2,  
+generate **nodes with a tree structure**.
 
-### Nodeのイメージ
+### Node shape
 
-Pythonだとこんなクラスを想定：
+In Python, imagine classes like this:
 
 ```python
 class ElementNode:
@@ -23,7 +23,7 @@ class TextNode:
         self.data = data
 ```
 
-### 入力トークン例
+### Input token example
 
 ```python
 tokens = [
@@ -36,7 +36,7 @@ tokens = [
 ]
 ```
 
-### 出力ツリー（概念）
+### Output tree (conceptual)
 
 ```text
 ElementNode("div")
@@ -45,10 +45,10 @@ ElementNode("div")
         └─ TextNode("there")
 ```
 
-### ヒント
+### Hint
 
-* 入力は**正しいネスト**を仮定（壊れたHTMLは考えない）
-* `StartTag`：新しい `ElementNode` を作ってスタックに積む
-* `Text`：スタックの一番上の `children` に追加
-* `EndTag`：スタックから Pop して、一つ上の `children` に追加
-* 一番外側は `root` ノードを作ってぶら下げてもいい
+* Assume the input is **properly nested** (ignore broken HTML)
+* `StartTag`: create a new `ElementNode` and push it on the stack
+* `Text`: append to the top stack node's `children`
+* `EndTag`: pop from the stack and append to the parent node's `children`
+* You can create an outer `root` node and attach everything to it

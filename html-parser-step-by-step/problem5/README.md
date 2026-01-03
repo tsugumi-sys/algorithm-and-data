@@ -1,14 +1,14 @@
-## Problem 5（チャレンジ）: 壊れたHTMLへの耐性
+## Problem 5 (challenge): Tolerate broken HTML
 
-### ゴール
+### Goal
 
-次みたいな入力でも、とりあえずそれっぽくツリーを作る：
+Even with input like this, build a reasonable tree:
 
 ```html
 <div><b>bold</div>
 ```
 
-理想的な挙動（一例）：
+Ideal behavior (one example):
 
 ```text
 Element(div)
@@ -16,9 +16,9 @@ Element(div)
         └─ Text("bold")
 ```
 
-つまり：
+In other words:
 
-* `</div>` を見たときに、一番近い対応するStartTag（`<div>`）まで閉じる
-* `<b>` が閉じられてなくても許す
+* When you see `</div>`, close up to the nearest matching start tag (`<div>`)
+* Allow `<b>` to be left unclosed
 
-これは **ブラウザの挙動にちょっと近づく感じ**。
+This is **a bit closer to browser behavior**.

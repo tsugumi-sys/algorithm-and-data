@@ -1,13 +1,14 @@
-## Problem 1: Token 型をちゃんと分ける
+## Problem 1: Separate token types cleanly
 
-### ゴール
+### Goal
 
-`('TAG', 'div')` みたいな雑なタプルじゃなくて、  
-**StartTag / EndTag / Text** をきちんと区別したトークン列にする。
+Instead of a sloppy tuple like `('TAG', 'div')`,  
+instead of a sloppy tuple, produce a token list that clearly distinguishes  
+**StartTag / EndTag / Text**.
 
-### 要件
+### Requirements
 
-* 出力はこんな感じの dict（or dataclass）にする：
+* The output should be a dict (or dataclass) like this:
 
 ```python
 {"type": "StartTag", "name": "div"}
@@ -15,7 +16,7 @@
 {"type": "Text", "data": "Hello"}
 ```
 
-### 入出力例
+### Examples
 
 ```python
 tokenize("<div>Hello</div>")
@@ -33,8 +34,8 @@ tokenize("A<br>B")
 # ]
 ```
 
-### ヒント
+### Hint
 
-* `TAG` 文字列が `/` から始まるかで Start/End を分けられる
+* You can split Start/End by whether the `TAG` string starts with `/`
 
-  * 例: `"div"` → StartTag, `"/div"` → EndTag
+  * Example: `"div"` → StartTag, `"/div"` → EndTag

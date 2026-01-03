@@ -1,14 +1,14 @@
-## Problem 2: 属性付きタグに対応する（でもまだフラット）
+## Problem 2: Support tags with attributes (still flat)
 
-### ゴール
+### Goal
 
-タグの属性をパースしてみる。
+Parse tag attributes.
 
 ```html
 <div id="main" class="c1 c2">Hello</div>
 ```
 
-をこんなトークンにしたい：
+into tokens like:
 
 ```python
 {"type": "StartTag", "name": "div", "attrs": {"id": "main", "class": "c1 c2"}}
@@ -16,14 +16,14 @@
 {"type": "EndTag", "name": "div"}
 ```
 
-### 要件（シンプルでOK）
+### Requirements (simple is fine)
 
-* 属性は `name="value"` 形式のみ対応
-* シングルクォート `'` は考えなくていい（ダブルクォート限定）
-* 値にスペースは含まれてもいい（`class="c1 c2"` など）
-* 属性同士はスペース区切り
+* Only support attributes in `name="value"` form
+* You can ignore single quotes `'` (double quotes only)
+* Values may include spaces (e.g. `class="c1 c2"`)
+* Attributes are separated by spaces
 
-### 入出力例
+### Examples
 
 ```python
 tokenize('<img src="a.png" alt="logo">')
@@ -43,10 +43,10 @@ tokenize('<a href="https://example.com">Link</a>')
 # ]
 ```
 
-### ヒント
+### Hint
 
-* `TAG` 文字列を `name` 部分と `attr` 部分に分割するイメージ
+* Split the `TAG` string into a `name` part and an `attr` part
 
-  * 先頭の単語 → タグ名
-  * それ以降をパースして `name="value"` を取る
-* 正規表現を使ってもいいし、素直に state machine でもOK
+  * First word → tag name
+  * Parse the rest to extract `name="value"`
+* Regex is fine, or a simple state machine
