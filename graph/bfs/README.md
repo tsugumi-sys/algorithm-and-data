@@ -4,7 +4,6 @@ Interface
         add_edge(u, v): add an undirected edge between u and v (create nodes if needed)
         neighbors(node): return the iterable of neighbors for node in insertion order
 
-    dfs(graph, start): return a list of nodes visited in depth-first pre-order starting from start
     bfs(graph, start): return a list of nodes visited in breadth-first order starting from start
 
 Traversal rules

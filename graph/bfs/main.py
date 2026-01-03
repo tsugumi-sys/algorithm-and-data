@@ -8,9 +8,5 @@ class Graph:
         raise NotImplementedError
 
 
-def dfs(graph, start):
-    raise NotImplementedError
-
-
 def bfs(graph, start):
     raise NotImplementedError
