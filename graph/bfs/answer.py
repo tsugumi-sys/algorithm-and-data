@@ -8,7 +8,6 @@ from typing import Any, Self
 class GraphNode:
     value: str
     neighbors: list[Self]
-    visited: bool
 
 
 class Graph:
@@ -17,10 +16,10 @@ class Graph:
 
     def add_edge(self, u, v):
         if u not in self._edges:
-            new = GraphNode(u, [], False)
+            new = GraphNode(u, [])
             self._edges[u] = new
         if v not in self._edges:
-            new = GraphNode(v, [], False)
+            new = GraphNode(v, [])
             self._edges[v] = new
 
         self._add_to_neighbor(u, v)
@@ -34,20 +33,7 @@ class Graph:
         self._edges[node].neighbors.append(self._edges[new_neighbor])
 
     def neighbors(self, node: str) -> list[GraphNode]:
-        return list(self._edges[node].neighbors)
-
-    def _is_exists(self, node: str) -> bool:
-        return node in self._edges
-
-    def is_visited(self, node: str) -> bool:
-        if not self._is_exists(node):
-            raise KeyError(f"{node=} does not exist.")
-        return self._edges[node].visited
-
-    def mark_visited(self, node: str):
-        if not self._is_exists(node):
-            raise KeyError(f"{node=} does not exist.")
-        self._edges[node].visited = True
+        return tuple(self._edges[node].neighbors)
 
 
 @dataclass
@@ -88,14 +74,16 @@ def bfs(graph: Graph, start: str):
     queue = Queue()
     queue.enqueue(start)
     results = []
+    # Track visited per traversal so the same graph can be reused safely.
+    visited: set[str] = set()
     while not queue.is_empty():
         poped = queue.dequeue()
-        if graph.is_visited(poped):
+        if poped in visited:
             continue
         else:
-            graph.mark_visited(poped)
+            visited.add(poped)
             results.append(poped)
 
-            for n in [n for n in graph.neighbors(poped) if not n.visited]:
+            for n in [n for n in graph.neighbors(poped) if n.value not in visited]:
                 queue.enqueue(n.value)
     return results
