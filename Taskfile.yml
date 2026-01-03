@@ -1,0 +1,33 @@
+version: '3'
+
+tasks:
+  setup:
+    desc: Init uv project at ROOT and baseline files in ROOT/DIR
+    requires:
+      vars: [ROOT, DIR]
+    cmds:
+      - |
+          if [ ! -f "{{.ROOT}}/pyproject.toml" ]; then
+            uv init {{.ROOT}}
+          fi
+      - |
+          if [ ! -f "{{.ROOT}}/{{.DIR}}/README.md" ]; then : > "{{.ROOT}}/{{.DIR}}/README.md"; fi
+          if [ ! -f "{{.ROOT}}/{{.DIR}}/answer.py" ]; then : > "{{.ROOT}}/{{.DIR}}/answer.py"; fi
+          if [ ! -f "{{.ROOT}}/{{.DIR}}/main.py" ]; then cp "{{.ROOT}}/{{.DIR}}/answer.py" "{{.ROOT}}/{{.DIR}}/main.py"; fi
+          if [ ! -f "{{.ROOT}}/{{.DIR}}/test.py" ]; then cp "{{.ROOT}}/{{.DIR}}/answer.py" "{{.ROOT}}/{{.DIR}}/test.py"; fi
+      - uv add --project {{.ROOT}} pytest ruff
+      - uv sync --project {{.ROOT}}
+
+  lint:
+    desc: Run ruff
+    requires:
+      vars: [ROOT, DIR]
+    cmds:
+      - uv run --project {{.ROOT}} ruff check {{.ROOT}}/{{.DIR}}
+
+  test:
+    desc: Run pytest with print output
+    requires:
+      vars: [ROOT, DIR]
+    cmds:
+      - uv run --project {{.ROOT}} pytest -sv {{.ROOT}}/{{.DIR}}
