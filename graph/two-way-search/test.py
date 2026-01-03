@@ -20,23 +20,29 @@ def test_finds_shortest_path_in_undirected_graph():
     ]
     graph = build_graph(edges)
     path = bidirectional_search(graph, "A", "D")
-    assert path in (["A", "E", "D"], ["D", "E", "A"])  # allow either direction as long as shortest
+    assert path in (
+        ["A", "E", "D"],
+        ["D", "E", "A"],
+    )  # allow either direction as long as shortest
     assert len(path) == 3
 
 
-def test_prefers_shortest_when_multiple_paths_exist():
+def test_returns_any_shortest_when_multiple_shortest_paths_exist():
     edges = [
         (1, 2),
-        (2, 3),
-        (3, 4),
-        (1, 5),
-        (5, 4),
-        (2, 5),  # extra shorter option 1-2-5-4
+        (2, 6),
+        (1, 3),
+        (3, 6),
+        # ここから下は「別経路はあるが最短ではない」を作るためのノイズ
+        (2, 4),
+        (4, 5),
+        (5, 6),
     ]
     graph = build_graph(edges)
-    path = bidirectional_search(graph, 1, 4)
-    assert path in ([1, 2, 5, 4], [4, 5, 2, 1])
-    assert len(path) == 4
+    path = bidirectional_search(graph, 1, 6)
+
+    assert path in ([1, 2, 6], [1, 3, 6], [6, 2, 1], [6, 3, 1])
+    assert len(path) == 3
 
 
 def test_returns_none_when_no_path_exists():
