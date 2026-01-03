@@ -92,7 +92,6 @@ class BinarySearchTree:
             return root
 
         self._root = _delete(self._root, value)
-        return self._root
 
     def search(self, value):
         current = self._root
