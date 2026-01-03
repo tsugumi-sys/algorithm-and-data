@@ -19,11 +19,18 @@ tasks:
       - uv sync --project .
 
   lint:
-    desc: Run ruff on DIR
-    requires:
-      vars: [DIR]
+    desc: Run ruff on all subdirectories
     cmds:
-      - uv run --project . ruff check {{.DIR}}
+      - |
+          for d in */; do
+            d="${d%/}"
+            if [ "$d" = "__pycache__" ]; then
+              continue
+            fi
+            if [ -d "$d" ]; then
+              uv run --project . ruff check "$d"
+            fi
+          done
 
   test:
     desc: Run pytest with print output on DIR
