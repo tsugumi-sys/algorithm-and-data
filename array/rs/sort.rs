@@ -11,6 +11,18 @@ fn main() {
     // {} → normal display（Displayトレイト）
     // {:?} → debug display（Debugトレイト）
 
-    let v = vec![5, 2, 8, 1, 9]; // stored in heap, dynamic sizing.
+    let mut v = vec![5, 2, 8, 1, 9]; // stored in heap, dynamic sizing.
     println!("{:?}", v);
+
+    let mut left = 0;
+    let mut right = v.len() - 1;
+    while left < right {
+        v.swap(left, right);
+        left += 1;
+        right -= 1;
+    }
+    println!("swapped: {:?}", v);
+
+    v.reverse();
+    println!("reversed: {:?}", v);
 }
