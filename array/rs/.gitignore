@@ -1,3 +1,9 @@
 sort
 main
 string
+01_slice_args
+02_iter_variants
+03_safe_get
+04_windows_chunks
+05_vec_basics
+06_sort_variants
